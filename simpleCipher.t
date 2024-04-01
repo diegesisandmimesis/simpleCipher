@@ -5,6 +5,8 @@
 #include <adv3.h>
 #include <en_us.h>
 
+#include "simpleCipher.h"
+
 // Module ID for the library
 simpleCipherModuleID: ModuleID {
         name = 'Simple Cipher Library'

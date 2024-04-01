@@ -21,29 +21,12 @@
 
 #include "simpleCipher.h"
 
-versionInfo: GameID
-        name = 'simpleCipher Library Demo Game'
-        byline = 'Diegesis & Mimesis'
-        desc = 'Demo game for the simpleCipher library. '
-        version = '1.0'
-        IFID = '12345'
-	showAbout() {
-		"This is a simple test game that demonstrates the features
-		of the simpleCipher library.
-		<.p>
-		Consult the README.txt document distributed with the library
-		source for a quick summary of how to use the library in your
-		own games.
-		<.p>
-		The library source is also extensively commented in a way
-		intended to make it as readable as possible. ";
+versionInfo: GameID;
+gameMain: GameMainDef
+	newGame() {
+		local v;
+
+		v = base64.encode('foozle');
+		aioSay('<<base64.decode(v)>>\n ');
 	}
 ;
-gameMain: GameMainDef
-	initialPlayerChar = me
-	inlineCommand(cmd) { "<b>&gt;<<toString(cmd).toUpper()>></b>"; }
-	printCommand(cmd) { "<.p>\n\t<<inlineCommand(cmd)>><.p> "; }
-;
-
-startRoom: Room 'Void' "This is a featureless void.";
-+me: Person;
