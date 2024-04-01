@@ -23,18 +23,62 @@
 
 versionInfo: GameID;
 gameMain: GameMainDef
+	_tests = static [
+		[ base64, 'foozle' ],
+		[ rot13, 'Foozle!' ],
+		[ caesar, 'Foozle!', -3 ]
+	]
 	newGame() {
-		_testCipher(base64, 'foozle');
-		"<.p> ";
-		_testCipher(rot13, 'Foozle!');
-		"<.p> ";
-		_testCipher(caesar, 'Foozle!', -3);
+		local err;
+
+		err = 0;
+		_tests.forEach(function(o) {
+			if(!_testCipher(o[1], o[2],
+				((o.length > 2) ? o[3] : nil)))
+				err += 1;
+			"<.p> ";
+		});
+		if(err != 0)
+			"ERROR:  Failed <<toString(err)>> of
+				<<toString(_tests.length)>> tests.\n ";
+
+		_testEnigma();
+	}
+
+	_testEnigma() {
+		local cfg, v;
+
+		cfg = new EnigmaConfig();
+		cfg.setKey('ABC');
+		cfg.setRotors([ 'III', 'II', 'I' ]);
+		cfg.setReflector('B');
+
+		"enigma: \n";
+
+/*
+		if(!enigma.setConfig(cfg)) {
+			"ERROR:  failed to set enigma config\n ";
+			return(nil);
+		}
+*/
+
+		v = enigma.encode('abcdefghijklmnopqrstuvwxyz', cfg);
+		"\tencode = <<toString(v)>>\n ";
+		v = enigma.encode(toString(v), cfg);
+		"\tdecode = <<toString(v)>>\n ";
+
+		return(true);
 	}
 
 	_testCipher(obj, str, arg?) {
 		local v;
 
-		"<<obj.cipherID>>:\n ";
+		"<<obj.cipherID>>";
+		if(arg != nil)
+			" (<<toString(arg)>>)";
+		":\n ";
+
+		"\tplaintext: <<toString(str)>>\n ";
 		if(arg)
 			v = obj.encode(str, arg);
 		else
@@ -46,5 +90,12 @@ gameMain: GameMainDef
 		else
 			v = obj.decode(v);
 		"\tdecode: <<toString(v)>>\n ";
+
+		if(v != str) {
+			"\tERROR:  plaintext and decode don't match\n ";
+			return(nil);
+		}
+
+		return(true);
 	}
 ;

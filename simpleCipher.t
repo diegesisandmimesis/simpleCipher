@@ -14,3 +14,9 @@ simpleCipherModuleID: ModuleID {
         version = '1.0'
         listingOrder = 99
 }
+
+class SimpleCipher: object
+	cipherID = nil
+	encode(str, arg?) { return(str); }
+	decode(str, arg?) { return(encode(str, arg)); }
+;

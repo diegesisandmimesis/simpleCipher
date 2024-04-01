@@ -9,7 +9,7 @@
 
 #include "simpleCipher.h"
 
-rot13: object
+rot13: SimpleCipher
 	cipherID = 'rot13'
 
 	encode(buf) {

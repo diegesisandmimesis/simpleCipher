@@ -8,7 +8,7 @@
 #include "simpleCipher.h"
 
 // Simple, slightly kludgy base64 implementation in TADS3.
-base64: object
+base64: SimpleCipher
 	cipherID = 'base64'
 
 	// base64 character set.

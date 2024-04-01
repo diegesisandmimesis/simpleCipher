@@ -20,7 +20,7 @@
 
 #include "simpleCipher.h"
 
-caesar: object
+caesar: SimpleCipher
 	cipherID = 'caesar'
 
 	encode(buf, shift) {
