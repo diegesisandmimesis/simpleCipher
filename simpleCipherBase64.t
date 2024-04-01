@@ -9,6 +9,8 @@
 
 // Simple, slightly kludgy base64 implementation in TADS3.
 base64: object
+	cipherID = 'base64'
+
 	// base64 character set.
 	_base64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
 

@@ -24,12 +24,27 @@
 versionInfo: GameID;
 gameMain: GameMainDef
 	newGame() {
+		_testCipher(base64, 'foozle');
+		"<.p> ";
+		_testCipher(rot13, 'Foozle!');
+		"<.p> ";
+		_testCipher(caesar, 'Foozle!', -3);
+	}
+
+	_testCipher(obj, str, arg?) {
 		local v;
 
-		v = base64.encode('foozle');
-		aioSay('<<base64.decode(v)>>\n ');
-		v = rot13.encode('Foozle!');
-		aioSay('<<toString(v)>>\n ');
-		aioSay('<<toString(rot13.decode(v))>>\n ');
+		"<<obj.cipherID>>:\n ";
+		if(arg)
+			v = obj.encode(str, arg);
+		else
+			v = obj.encode(str);
+		"\tencode: <<toString(v)>>\n ";
+
+		if(arg)
+			v = obj.decode(v, arg);
+		else
+			v = obj.decode(v);
+		"\tdecode: <<toString(v)>>\n ";
 	}
 ;

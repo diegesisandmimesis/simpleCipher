@@ -10,6 +10,8 @@
 #include "simpleCipher.h"
 
 rot13: object
+	cipherID = 'rot13'
+
 	encode(buf) {
 		local i, c, r;
 
