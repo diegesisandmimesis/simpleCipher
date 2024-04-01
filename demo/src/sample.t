@@ -28,5 +28,8 @@ gameMain: GameMainDef
 
 		v = base64.encode('foozle');
 		aioSay('<<base64.decode(v)>>\n ');
+		v = rot13.encode('Foozle!');
+		aioSay('<<toString(v)>>\n ');
+		aioSay('<<toString(rot13.decode(v))>>\n ');
 	}
 ;
