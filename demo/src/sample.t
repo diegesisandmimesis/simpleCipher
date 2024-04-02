@@ -42,10 +42,28 @@ gameMain: GameMainDef
 			"ERROR:  Failed <<toString(err)>> of
 				<<toString(_tests.length)>> tests.\n ";
 
-		_testEnigma();
+		_testEnigma('You are standing in an open field west of a
+			white house, with a boarded front door.');
+
+		"<.p> ";
+
+		_testMonoalphabetic('Foozle!', 'EKMFLGDQVZNTOWYHXUSPAIBRCJ');
 	}
 
-	_testEnigma() {
+	_testMonoalphabetic(str, alph0) {
+		local obj, v;
+
+		obj = new SimpleCipherMonoalphabetic(alph0);
+		"<<obj.cipherID>>:\n ";
+		"\talphabet0: <<toString(obj._alphabet)>>\n ";
+		"\talphabet1: <<toString(obj.alphabet)>>\n ";
+		v = obj.encode(str);
+		"\tencode: <<toString(v)>>\n ";
+		v = obj.decode(v);
+		"\tdecode: <<toString(v)>>\n ";
+	}
+
+	_testEnigma(txt) {
 		local cfg, v;
 
 		cfg = new EnigmaConfig();
@@ -54,17 +72,10 @@ gameMain: GameMainDef
 		cfg.setReflector('B');
 
 		"enigma: \n";
-
-/*
-		if(!enigma.setConfig(cfg)) {
-			"ERROR:  failed to set enigma config\n ";
-			return(nil);
-		}
-*/
-
-		v = enigma.encode('abcdefghijklmnopqrstuvwxyz', cfg);
+		"\tplaintext: <<toString(txt)>>\n ";
+		v = enigma.encode(txt, cfg);
 		"\tencode = <<toString(v)>>\n ";
-		v = enigma.encode(toString(v), cfg);
+		v = enigma.decode(toString(v), cfg);
 		"\tdecode = <<toString(v)>>\n ";
 
 		return(true);

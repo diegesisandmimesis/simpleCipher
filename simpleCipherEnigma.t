@@ -2,16 +2,20 @@
 //
 // simpleCipherEnigma.t
 //
+//	Simple approximation of the M3 Enigma machine but lacking the
+//	plugboard.
+//
 //
 #include <adv3.h>
 #include <en_us.h>
 
 #include "simpleCipher.h"
 
+// Class for rotor definitions
 class EnigmaRotor: object
-	rotorID = nil
-	alphabet = nil
-	lugSetting = nil
+	rotorID = nil		// rotor ID
+	alphabet = nil		// cipher alphabet of the rotor
+	lugSetting = nil	// letter on which the rotor steps
 
 	initializeRotor() {
 		if((location == nil) || !location.ofKind(enigma))
@@ -21,13 +25,13 @@ class EnigmaRotor: object
 ;
 
 class EnigmaConfig: object
-	alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-	key = nil
-	rotorList = nil
-	rotors = nil
-	offsets = nil
-	reflector = nil
+	alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'	// input/output alphabet
+	key = nil				// the encryption key
+	rotors = nil				// array of the rotors used
+	offsets = nil				// current rotor offsets
+	reflector = nil				// reflector rotor
 
+	// Set the rotors.  Arg is a list of rotor IDs.
 	setRotors(lst) {
 		local i, r;
 
@@ -48,8 +52,11 @@ class EnigmaConfig: object
 		return(true);
 	}
 
+	// Set the key.  Note that the key length must equal the number
+	// of rotors, although that's not checked here but at init.
 	setKey(v) { key = v; }
 
+	// Set the reflector.
 	setReflector(id) {
 		local r;
 
@@ -65,6 +72,8 @@ class EnigmaConfig: object
 		
 	}
 
+	// Initialize the configuration.  Returns boolean true if the config
+	// is valid, nil otherwise.
 	initializeConfig() {
 		if(initializeKey() != true)
 			return(nil);
@@ -72,16 +81,22 @@ class EnigmaConfig: object
 		return(true);
 	}
 
+	// Initialize the key, including checking its validity.
 	initializeKey() {
 		if(key == nil)
 			return(nil);
+
+		// Key has to have exactly as many letters as we have rotors.
 		if(key.length != rotors.length)
 			return(nil);
+
+		// Convert to upper case.
 		key = key.toUpper();
 
 		return(true);
 	}
 
+	// Compute the initial rotor offsets (due to the key setting).
 	initializeOffsets() {
 		local i;
 
@@ -97,49 +112,71 @@ class EnigmaConfig: object
 ;
 
 enigma: SimpleCipher, PreinitObject
-	_rotors = perInstance(new LookupTable)
+	_rotors = perInstance(new LookupTable)	// table of all rotors
+	_config = nil				// our current config
 
-	_config = nil
+	// Run at preinit.
+	execute() { initializeRotors(); }
 
-	execute() {
-		initializeRotors();
-	}
-
+	// Look for all our rotor declarations.
 	initializeRotors() {
 		forEachInstance(EnigmaRotor, function(o) {
 			o.initializeRotor();
 		});
 	}
 
+	// Add a rotor to our table.
 	addRotor(obj) {
 		if((obj == nil) || !obj.ofKind(EnigmaRotor))
 			return;
 		_rotors[obj.rotorID] = obj;
 	}
 
-	canonicalizePlaintext(str) {
+	// Convert the string into the canonical form:  only alphabetic,
+	// no spaces, all upper case.
+	canonicalizeInput(str) {
 		local r;
 
 		r = rexReplace('<^Alpha>', str, '');
 		return(r.toUpper());
 	}
 
+	// Encode the given string.
+	// Optional second arg is a EnigmaConfig instance.
 	encode(str, cfg?) {
-		local i, r, txt;
+		local i, j, r, txt;
 
+		// If we were passed a config object, use it.
 		if((cfg != nil) && (setConfig(cfg) != true))
 			return(nil);
 
-		if((txt = canonicalizePlaintext(str)) == nil)
+		// Canonicalize the string we're converting.
+		if((txt = canonicalizeInput(str)) == nil)
 			return(nil);
 
+		// String buffer to hold the return value.
 		r = new StringBuffer();
+
+		// We separate the output into 5-character blocks.  This
+		// is our counter for that.
+		j = 0;
+
+		// Go through the input.
 		for(i = 1; i <= txt.length; i++) {
+			// Encode this individial letter.
 			r.append(encodeLetter(txt.substr(i, 1)));
+
+			// See if we've completed a five-character block.
+			j += 1;
+			if(j == 5) {
+				r.append(' ');
+				j = 0;
+			}
 		}
 		return(r);
 	}
 
+	// Encode an individual character.
 	encodeLetter(chr) {
 		local i, idx, r, rotor, step;
 
@@ -188,11 +225,14 @@ enigma: SimpleCipher, PreinitObject
 		return(r);
 	}
 
+	// Returns the given rotor.
 	getRotor(id) { return(_rotors[id]); }
 
+	// Set the current config.  Arg is an EnigmaConfig instance.
 	setConfig(cfg) {
 		if((cfg == nil) || !cfg.ofKind(EnigmaConfig))
 			return(nil);
+
 		if(cfg.initializeConfig() != true)
 			return(nil);
 
@@ -201,6 +241,7 @@ enigma: SimpleCipher, PreinitObject
 		return(true);
 	}
 ;
+// Rotor definitions.
 +EnigmaRotor 'I' 'EKMFLGDQVZNTOWYHXUSPAIBRCJ' 'R';
 +EnigmaRotor 'II' 'AJDKSIRUXBLHWTMCQGZNPYFVOE' 'F';
 +EnigmaRotor 'III' 'BDFHJLCPRTXVZNYEIWGAKMUSQO' 'W';
