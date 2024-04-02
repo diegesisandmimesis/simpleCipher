@@ -60,7 +60,7 @@
 //		// are always stripped of non-alphabetic characters and
 //		// converted to upper case.  The X is the result of the
 //		// padding described above.
-//		dec = enigmap.decode(enc, cfg);
+//		dec = enigma.decode(enc, cfg);
 //
 //	There's also an abstract monoalphabetic substitution cipher class.
 //	You have to declare an instance in order to use it.  The constructor
