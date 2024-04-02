@@ -68,7 +68,7 @@ class SimpleCipherMonoalphabetic: SimpleCipher
 				if((idx = alph0.find(chr.toUpper())) == nil)
 					r.append('?');
 				else
-					r.append(alph1.substr(idx, 1));
+					r.append(alph1.substr(idx, 1).toLower());
 			
 			} else {
 				r.append(chr);

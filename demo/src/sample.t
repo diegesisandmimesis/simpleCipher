@@ -24,9 +24,9 @@
 versionInfo: GameID;
 gameMain: GameMainDef
 	_tests = static [
-		[ base64, 'foozle' ],
-		[ rot13, 'Foozle!' ],
-		[ caesar, 'Foozle!', -3 ]
+		[ base64, 'There is a small mailbox here.' ],
+		[ rot13, 'There is a small mailbox here.' ],
+		[ caesar, 'There is a small mailbox here.', -3 ]
 	]
 	newGame() {
 		local err;
@@ -42,12 +42,12 @@ gameMain: GameMainDef
 			"ERROR:  Failed <<toString(err)>> of
 				<<toString(_tests.length)>> tests.\n ";
 
-		_testEnigma('You are standing in an open field west of a
-			white house, with a boarded front door.');
+		_testEnigma('There is a small mailbox here.');
 
 		"<.p> ";
 
-		_testMonoalphabetic('Foozle!', 'EKMFLGDQVZNTOWYHXUSPAIBRCJ');
+		_testMonoalphabetic('There is a small mailbox here.',
+			'EKMFLGDQVZNTOWYHXUSPAIBRCJ');
 	}
 
 	_testMonoalphabetic(str, alph0) {

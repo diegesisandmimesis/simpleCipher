@@ -173,6 +173,15 @@ enigma: SimpleCipher, PreinitObject
 				j = 0;
 			}
 		}
+
+		// Pad.
+		if(j != 0) {
+			while(j < 5) {
+				r.append(encodeLetter('X'));
+				j += 1;
+			}
+		}
+
 		return(r);
 	}
 
