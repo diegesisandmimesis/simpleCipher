@@ -5,3 +5,4 @@ source: simpleCipherCaesar.t
 source: simpleCipherEnigma.t
 source: simpleCipherMonoalphabetic.t
 source: simpleCipherRot13.t
+source: simpleCipherVigenere.t
