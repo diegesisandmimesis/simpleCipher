@@ -27,8 +27,8 @@ gameMain: GameMainDef
 		local cfg, msg, v;
 
 		cfg = new EnigmaConfig();
-		cfg.setRing('XMV');
-		cfg.setKey('ABL');
+		cfg.setRing('AAA');
+		cfg.setKey('AAA');
 		cfg.setRotors([ 'II', 'I', 'III' ]);
 		cfg.setReflector('B');
 		cfg.padOutput = true;
@@ -39,7 +39,7 @@ gameMain: GameMainDef
 		//enigma._config._debugOffsets();
 		
 
-		msg = 'SECRET';
+		msg = 'AAAAAAAAAAAAAAAAAAAAAAAAAA';
 		//msg = 'A';
 		"plaintext = <<msg>>\n ";
 		v = enigma.encode(msg, cfg);

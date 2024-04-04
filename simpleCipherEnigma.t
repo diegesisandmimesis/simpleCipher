@@ -138,8 +138,11 @@ class EnigmaRotor: EnigmaAlphabet
 	turnoverIndex = nil
 
 	initializeRotor() {
+		local idx;
+
 		inherited();
-		turnoverIndex = _alphabet.find(turnoverAt);
+		if((idx = _alphabet.find(turnoverAt)) != nil)
+			turnoverIndex = idx - 1;
 	}
 ;
 
@@ -395,9 +398,9 @@ enigma: SimpleCipher, PreinitObject
 			_config.offsets[i] =
 				_config.offsets[i] % rotor.alphabet.length;
 
-			// Move the offset to the range 1 to 26 and
-			// compare it to the index of the turnover letter
-			if((_config.offsets[i] + 1) != rotor.turnoverIndex)
+			if(rotor.turnoverIndex == nil)
+				step = nil;
+			else if(_config.offsets[i] != rotor.turnoverIndex)
 				step = nil;
 			i--;
 		}
