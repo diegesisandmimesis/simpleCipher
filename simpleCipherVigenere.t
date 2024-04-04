@@ -59,5 +59,7 @@ vigenere: SimpleCipher
 		return(toString(r));
 	}
 
-	decode(str, key, useAsIs?, v?) { return(encode(str, key, true)); }
+	decode(str, key, useAsIs?, v?) {
+		return(encode(str, key, useAsIs, true));
+	}
 ;

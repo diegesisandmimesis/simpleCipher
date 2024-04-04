@@ -134,16 +134,12 @@ class EnigmaReflector: EnigmaAlphabet;
 
 // Class for rotor definitions
 class EnigmaRotor: EnigmaAlphabet
-	notch = nil
-	lugSetting = nil	// letter on which the rotor steps
-	lugIndex = nil
-
-	notchIndex = nil
+	turnoverAt = nil	// letter on which the rotor steps
+	turnoverIndex = nil
 
 	initializeRotor() {
 		inherited();
-		notchIndex = alphabet.find(notch);
-		lugIndex = _alphabet.find(lugSetting);
+		turnoverIndex = _alphabet.find(turnoverAt);
 	}
 ;
 
@@ -395,7 +391,7 @@ enigma: SimpleCipher, PreinitObject
 			_config.offsets[i] += 1;
 			_config.offsets[i] =
 				_config.offsets[i] % rotor.alphabet.length;
-			if(_config.offsets[i] != rotor.notchIndex)
+			if(_config.offsets[i] != rotor.turnoverIndex)
 				step = nil;
 			i--;
 		}
@@ -472,14 +468,18 @@ enigma: SimpleCipher, PreinitObject
 	}
 ;
 // Rotor definitions.
-+EnigmaRotor 'I' 'EKMFLGDQVZNTOWYHXUSPAIBRCJ' 'Y' 'R';	// Enigma I, 1930
-+EnigmaRotor 'II' 'AJDKSIRUXBLHWTMCQGZNPYFVOE' 'M' 'F';	// Enigma I, 1930
-+EnigmaRotor 'III' 'BDFHJLCPRTXVZNYEIWGAKMUSQO' 'D' 'W';// Enigma I, 1930
-+EnigmaRotor 'IV' 'ESOVPZJAYQUIRHXLNFTGKDCMWB' 'R' 'K';	// M3, 1938
-+EnigmaRotor 'V' 'VZBRGITYUPSDNHLXAWMJQOFECK' 'H' 'A';	// M3, 1938
-+EnigmaRotor 'test' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' '?' '?';
-//+EnigmaRotor 'VI' 'JPGVOUMFYQBENHZRDKASXLICTW' [ 'H', 'U' ] [ 'Z', 'M' ];		// M3, 1939/M4, 1942
-//+EnigmaRotor 'VII' 'NZJHGRCXMYSWBOUFAIVLPEKQDT' [ 'H', 'U' ] [ 'Z', 'M' ];	// M3, 1939/M4, 1942
++EnigmaRotor 'I' 'EKMFLGDQVZNTOWYHXUSPAIBRCJ' 'R';	// Enigma I, 1930
++EnigmaRotor 'II' 'AJDKSIRUXBLHWTMCQGZNPYFVOE' 'F';	// Enigma I, 1930
++EnigmaRotor 'III' 'BDFHJLCPRTXVZNYEIWGAKMUSQO' 'W';	// Enigma I, 1930
++EnigmaRotor 'IV' 'ESOVPZJAYQUIRHXLNFTGKDCMWB' 'K';	// M3, 1938
++EnigmaRotor 'V' 'VZBRGITYUPSDNHLXAWMJQOFECK' 'A';	// M3, 1938
++EnigmaRotor 'test' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' '?';	// testing
+//
+// Un-implemented multi-lug rotors
+//+EnigmaRotor 'VI' 'JPGVOUMFYQBENHZRDKASXLICTW' [ 'Z', 'M' ];	// M3, 1939/M4, 1942
+//+EnigmaRotor 'VII' 'NZJHGRCXMYSWBOUFAIVLPEKQDT' [ 'Z', 'M' ];	// M3, 1939/M4, 1942
+//+EnigmaRotor 'VIII' 'FKQHTLXOCBJSPDZRAMEWNIUYGV' [ 'Z', 'M' ];// M3, 1939/M4, 1942
+//
 // Reflector Definitions
 +EnigmaReflector 'A' 'EJMZALYXVBWFCRQUONTSPIKHGD';
 +EnigmaReflector 'B' 'YRUHQSLDPXNGOKMIEBFZCWVJAT';	// standard wartime
