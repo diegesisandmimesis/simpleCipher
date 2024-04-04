@@ -67,9 +67,11 @@ gameMain: GameMainDef
 		local cfg, v;
 
 		cfg = new EnigmaConfig();
-		cfg.setKey('ABC');
+		cfg.setRing('XMV');
+		cfg.setKey('ABL');
 		cfg.setRotors([ 'III', 'II', 'I' ]);
 		cfg.setReflector('B');
+		//cfg.setPlugboard([ 'bq', 'cr', 'di', 'ej', 'kw', 'mt', 'os', 'px', 'uz', 'gh' ]);
 
 		"enigma: \n";
 		"\tplaintext: <<toString(txt)>>\n ";
