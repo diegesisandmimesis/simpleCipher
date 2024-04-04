@@ -27,13 +27,6 @@ vigenere: SimpleCipher
 	cipherID = 'vigenere'
 	alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-	canonicalizeInput(str) {
-		local r;
-
-		r = rexReplace('<^Alpha>', str, '');
-		return(r.toUpper());
-	}
-
 	encode(str, key, useAsIs?, reverse?) {
 		local buf, i, off, r;
 
@@ -50,7 +43,7 @@ vigenere: SimpleCipher
 
 		r = new StringBuffer(str.length);
 		for(i = 1; i <= str.length; i++) {
-			off = alphabet.find(buf.substr(i, 1));
+			off = alphabet.find(buf.substr(i, 1)) - 1;
 			if(reverse)
 				off *= -1;
 			r.append(caesar.encode(str.substr(i, 1), off));

@@ -1,5 +1,6 @@
 name: simpleCipher Library
 source: simpleCipher.t
+source: simpleCipherAutokey.t
 source: simpleCipherBase64.t
 source: simpleCipherCaesar.t
 source: simpleCipherEnigma.t

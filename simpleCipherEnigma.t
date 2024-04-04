@@ -157,7 +157,9 @@ class EnigmaConfig: object
 	//alphabets0 = nil
 	//ringOffsets = nil
 
-	padOutput = true
+	padOutput = true			// pad output to multiple of 5
+	doubleStepAnomaly = true		// implement the double step
+						// anomaly
 
 	// Set the rotors.  Arg is a list of rotor IDs.
 	setRotors(lst) {
@@ -327,15 +329,6 @@ enigma: SimpleCipher, PreinitObject
 		_rotors[obj.rotorID] = obj;
 	}
 
-	// Convert the string into the canonical form:  only alphabetic,
-	// no spaces, all upper case.
-	canonicalizeInput(str) {
-		local r;
-
-		r = rexReplace('<^Alpha>', str, '');
-		return(r.toUpper());
-	}
-
 	// Encode the given string.
 	// Optional second arg is a EnigmaConfig instance.
 	encode(str, cfg?) {
@@ -382,19 +375,37 @@ enigma: SimpleCipher, PreinitObject
 
 	// Advance the rotors.
 	advanceRotors() {
-		local i, rotor, step;
+		local i, rotor, step, t;
 
 		step = true;
 		i = _config.rotors.length;
+
+		t = new Vector(i, i);
+
 		while(step && (i > 0)) {
-			rotor = _config.rotors[i];
+			// Step the rotor
 			_config.offsets[i] += 1;
+
+			// Remember we stepped this rotor.
+			t[i] = true;
+
+			rotor = _config.rotors[i];
+
+			// Canonicalize the offsets.  Result is 0 - 25.
 			_config.offsets[i] =
 				_config.offsets[i] % rotor.alphabet.length;
-			if(_config.offsets[i] != rotor.turnoverIndex)
+
+			// Move the offset to the range 1 to 26 and
+			// compare it to the index of the turnover letter
+			if((_config.offsets[i] + 1) != rotor.turnoverIndex)
 				step = nil;
 			i--;
 		}
+
+		// Double-stepping anomaly
+		if((_config.doubleStepAnomaly == true)
+			&& (_config.rotors.length == 3) && t[2] && t[3])
+			_config.offsets[2] += 1;
 	}
 
 	applyPlugboard(chr) {

@@ -111,4 +111,9 @@ class SimpleCipher: object
 	cipherID = nil
 	encode(str, arg?) { return(str); }
 	decode(str, arg?) { return(encode(str, arg)); }
+
+	// Convert string to alphabetic-only, all-caps.
+	canonicalizeInput(str) {
+		return(rexReplace('<^Alpha>', str, '').toUpper());
+	}
 ;

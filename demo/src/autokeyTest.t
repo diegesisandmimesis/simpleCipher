@@ -1,6 +1,6 @@
 #charset "us-ascii"
 //
-// vigenereTest.t
+// autokeyTest.t
 // Version 1.0
 // Copyright 2022 Diegesis & Mimesis
 //
@@ -8,7 +8,7 @@
 //
 // It can be compiled via the included makefile with
 //
-//	# t3make -f vigenereTest.t3m
+//	# t3make -f autokeyTest.t3m
 //
 // ...or the equivalent, depending on what TADS development environment
 // you're using.
@@ -29,9 +29,9 @@ gameMain: GameMainDef
 		str = 'There is a small mailbox here.';
 		key = 'froboz';
 
-		r = vigenere.encode(str, key);
+		r = autokey.encode(str, key);
 		"encode = <<toString(r)>>\n ";
-		r = vigenere.decode(r, key);
+		r = autokey.decode(r, key);
 		"decode = <<toString(r)>>\n ";
 	}
 ;
