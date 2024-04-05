@@ -24,32 +24,20 @@
 versionInfo: GameID;
 gameMain: GameMainDef
 	newGame() {
-		//_testEnigma('AAAAA');
-		_testEnigma('AAAAA');
+		_testEnigma('SECRET');
 	}
 
 	_testEnigma(txt) {
 		local cfg, v;
 
 		cfg = new EnigmaConfig();
-		local x = 0;
 
-		if(x == 0) {
-			cfg.setRing('XMV');
-			cfg.setKey('ABL');
-			cfg.setRotors([ 'II', 'I', 'III' ]);
-			cfg.setReflector('A');
-			cfg.setPlugboard([ 'AM', 'FI', 'NV', 'PS', 'TU',
-				'WZ' ]);
-		}
-		if(x == 1) {
-			cfg.setRing('AAA');
-			cfg.setKey('AAA');
-			cfg.setRotors([ 'I', 'test', 'II' ]);
-			cfg.setReflector('A');
-		}
-/*
-*/
+		cfg.setRing('XMV');
+		cfg.setKey('ABL');
+		cfg.setRotors([ 'II', 'I', 'III' ]);
+		cfg.setReflector('A');
+		cfg.setPlugboard([ 'AM', 'FI', 'NV', 'PS', 'TU',
+			'WZ' ]);
 
 		"enigma: \n";
 		"\tplaintext: <<toString(txt)>>\n ";

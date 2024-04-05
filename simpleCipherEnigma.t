@@ -416,7 +416,7 @@ enigma: SimpleCipher, PreinitObject, EnigmaObject
 			&& (_config.rotors.length == 3) && t[2] && t[3]) {
 			_config.offsets[2] += 1;
 			_debug('double-stepping middle rotor');
-			}
+		}
 	}
 
 	applyPlugboard(chr) {
@@ -468,6 +468,8 @@ enigma: SimpleCipher, PreinitObject, EnigmaObject
 	encodeLetter(chr) {
 		local i, r;
 
+		_debug('encoding <<toString(chr)>>');
+
 		advanceRotors();
 		r = applyPlugboard(chr);
 
@@ -484,7 +486,7 @@ enigma: SimpleCipher, PreinitObject, EnigmaObject
 
 		r = applyPlugboard(r);
 
-		_debug('<<toString(chr)>> -> <<toString(r)>>');
+		_debug('encoded <<toString(chr)>> -> <<toString(r)>>');
 
 		return(r);
 	}

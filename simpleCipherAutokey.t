@@ -2,6 +2,14 @@
 //
 // simpleCipherAutokey.t
 //
+//	Autokey cipher implementation.
+//
+//	encode() and decode() take two arguments:  the string to be
+//	encoded/decoded and the encryption key.
+//
+//	As a historical note, the autokey cipher was devised by
+//	Blaise de Vigenère, unlike the Vigenere cipher which bears his name.
+//
 //
 #include <adv3.h>
 #include <en_us.h>
