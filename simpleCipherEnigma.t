@@ -54,7 +54,11 @@
 
 #include "simpleCipher.h"
 
-class EnigmaAlphabet: object
+class EnigmaObject: object
+	_debug(str) {}
+;
+
+class EnigmaAlphabet: EnigmaObject
 	rotorID = nil		// rotor ID
 	alphabet = nil		// cipher alphabet of the rotor
 	_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -147,7 +151,7 @@ class EnigmaRotor: EnigmaAlphabet
 ;
 
 
-class EnigmaConfig: object
+class EnigmaConfig: EnigmaObject
 	alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'	// input/output alphabet
 	key = nil				// the encryption key
 	rotors = nil				// array of the rotors used
@@ -155,10 +159,6 @@ class EnigmaConfig: object
 	reflector = nil				// reflector rotor
 	plugboard = nil				// plugboard settings
 	ring = nil				// ring settings
-
-	//alphabets = nil
-	//alphabets0 = nil
-	//ringOffsets = nil
 
 	padOutput = true			// pad output to multiple of 5
 	doubleStepAnomaly = true		// implement the double step
@@ -276,15 +276,6 @@ class EnigmaConfig: object
 		return(true);
 	}
 
-	_debugOffsets() {
-		local i;
-
-		"ID\t\toffset\n ";
-		for(i = 1; i <= rotors.length; i++) {
-			"<<rotors[i].rotorID>>\t\t<<toString(offsets[i])>>\n ";
-		}
-	}
-
 	modAlpha(v) {
 		while(v > alphabet.length)
 			v -= alphabet.length;
@@ -309,9 +300,19 @@ class EnigmaConfig: object
 			offsets.append(v % alphabet.length);
 		}
 	}
+
+	_debugRotorOffsets() {
+		local i;
+
+		_debug('rotor offsets:');
+		for(i = 1; i <= rotors.length; i++) {
+			_debug('\t<<toString(i)>>: <<rotors[i].rotorID>> =
+				<<toString(offsets[i])>>');
+		}
+	}
 ;
 
-enigma: SimpleCipher, PreinitObject
+enigma: SimpleCipher, PreinitObject, EnigmaObject
 	_rotors = perInstance(new LookupTable)	// table of all rotors
 	_config = nil				// our current config
 
@@ -402,31 +403,52 @@ enigma: SimpleCipher, PreinitObject
 				step = nil;
 			else if(_config.offsets[i] != rotor.turnoverIndex)
 				step = nil;
+
+			if(i != _config.rotors.length)
+				_debug('stepping rotor <<toString(i)>>
+					(<<_config.rotors[i].rotorID>>)');
+
 			i--;
 		}
 
 		// Double-stepping anomaly
 		if((_config.doubleStepAnomaly == true)
-			&& (_config.rotors.length == 3) && t[2] && t[3])
+			&& (_config.rotors.length == 3) && t[2] && t[3]) {
 			_config.offsets[2] += 1;
+			_debug('double-stepping middle rotor');
+			}
 	}
 
 	applyPlugboard(chr) {
+		local r;
+
 		if(_config.plugboard == nil)
 			return(chr);
 
-		return(_config.plugboard[chr] ? _config.plugboard[chr] : chr);
+		r = (_config.plugboard[chr] ? _config.plugboard[chr] : chr);
+		_debug('\t<<toString(chr)>> -> <<toString(r)>>: plugboard');
+
+		return(r);
 	}
 
 	applyReflector(chr) {
-		return(_config.reflector.alphabet.substr(
-			_config.alphabet.find(chr), 1));
+		local r;
+
+		r = _config.reflector.alphabet.substr(
+			_config.alphabet.find(chr), 1);
+
+		_debug('\t<<toString(chr)>> -> <<toString(r)>>: reflector');
+
+		return(r);
 	}
 
 	applyRotorRL(chr, idx) {
 		local r;
 
 		r = _config.rotors[idx].getRL(chr, _config.offsets[idx]);
+
+		_debug('\t<<toString(chr)>> -> <<toString(r)>>:
+			<<_config.rotors[idx].rotorID>>');
 
 		return(r);
 	}
@@ -437,29 +459,34 @@ enigma: SimpleCipher, PreinitObject
 		r = _config.rotors[idx].getLR(chr,
 			_config.offsets[idx]);
 
+		_debug('\t<<toString(chr)>> -> <<toString(r)>>:
+			<<_config.rotors[idx].rotorID>>');
+
 		return(r);
 	}
 
 	encodeLetter(chr) {
-		local i;
+		local i, r;
 
 		advanceRotors();
-		chr = applyPlugboard(chr);
+		r = applyPlugboard(chr);
 
 		for(i = _config.rotors.length; i > 0; i--) {
-			chr = applyRotorRL(chr, i);
+			r = applyRotorRL(r, i);
 		}
 
-		chr = applyReflector(chr);
+		r = applyReflector(r);
 
 		for(i = 1; i <= _config.rotors.length; i++) {
-			if((chr = applyRotorLR(chr, i)) == nil)
+			if((r = applyRotorLR(r, i)) == nil)
 				return('?');
 		}
 
-		chr = applyPlugboard(chr);
+		r = applyPlugboard(r);
 
-		return(chr);
+		_debug('<<toString(chr)>> -> <<toString(r)>>');
+
+		return(r);
 	}
 
 	// Returns the given rotor.
@@ -502,3 +529,8 @@ enigma: SimpleCipher, PreinitObject
 +EnigmaReflector 'Gamma' 'FSOKANUERHMBTIYCWLQPZXVGJD';	// M4, 1942
 +EnigmaReflector 'ThinB' 'ENKQAUYWJICOPBLMDXZVFTHRGS';
 +EnigmaReflector 'ThinC' 'RDOBJNTKVEHMLFCWZAXGYIPSUQ';
+
+
+#ifdef ENIGMA_DEBUG
+modify EnigmaObject _debug(str) { aioSay('\n<<toString(str)>>\n '); };
+#endif // ENIGMA_DEBUG
