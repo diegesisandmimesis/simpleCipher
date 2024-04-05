@@ -413,7 +413,7 @@ enigma: SimpleCipher, PreinitObject, EnigmaObject
 
 		// Double-stepping anomaly
 		if((_config.doubleStepAnomaly == true)
-			&& (_config.rotors.length == 3) && t[2] && t[3]) {
+			&& (_config.rotors.length == 3) && t[1] && t[2]) {
 			_config.offsets[2] += 1;
 			_debug('double-stepping middle rotor');
 		}

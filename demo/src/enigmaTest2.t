@@ -32,15 +32,12 @@ gameMain: GameMainDef
 		cfg.setRotors([ 'II', 'I', 'III' ]);
 		cfg.setReflector('B');
 		cfg.padOutput = true;
-		//cfg.setPlugboard([ 'AM', 'FI', 'NV', 'PS', 'TU',
-			//'WZ' ]);
 
 		enigma.setConfig(cfg);
 		//enigma._config._debugOffsets();
 		
 
 		msg = 'AAAAAAAAAAAAAAAAAAAAAAAAAA';
-		//msg = 'A';
 		"plaintext = <<msg>>\n ";
 		v = enigma.encode(msg, cfg);
 		"encode = <<v>>\n ";

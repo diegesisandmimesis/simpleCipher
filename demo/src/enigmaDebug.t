@@ -38,12 +38,14 @@ gameMain: GameMainDef
 		//enigma._config._debugOffsets();
 		
 
-		msg = 'AAAAAAAAAAAAAAAAAAAAAAAAAA';
+		msg = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 		//msg = 'A';
 		"plaintext = <<msg>>\n ";
 		v = enigma.encode(msg, cfg);
 		"encode = <<v>>\n ";
+/*
 		v = enigma.decode(v, cfg);
 		"encode reverse = <<v>>\n ";
+*/
 	}
 ;
