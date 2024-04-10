@@ -312,26 +312,9 @@ class EnigmaConfig: EnigmaObject
 	}
 ;
 
-enigma: SimpleCipher, PreinitObject, EnigmaObject
-	_rotors = perInstance(new LookupTable)	// table of all rotors
+enigma: SimpleCipher, RotorMachine, EnigmaObject
 	_config = nil				// our current config
-
-	// Run at preinit.
-	execute() { initializeRotors(); }
-
-	// Look for all our rotor declarations.
-	initializeRotors() {
-		forEachInstance(EnigmaAlphabet, function(o) {
-			o.initializeRotor();
-		});
-	}
-
-	// Add a rotor to our table.
-	addRotor(obj) {
-		if((obj == nil) || !obj.ofKind(EnigmaAlphabet))
-			return;
-		_rotors[obj.rotorID] = obj;
-	}
+	rotorClass = EnigmaAlphabet
 
 	// Encode the given string.
 	// Optional second arg is a EnigmaConfig instance.
